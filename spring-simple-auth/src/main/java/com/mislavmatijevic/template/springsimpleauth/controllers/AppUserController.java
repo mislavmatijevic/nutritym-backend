@@ -1,6 +1,8 @@
 package com.mislavmatijevic.template.springsimpleauth.controllers;
 
+import com.mislavmatijevic.template.springsimpleauth.dto.AppUserLoginDto;
 import com.mislavmatijevic.template.springsimpleauth.dto.AppUserRegisterDto;
+import com.mislavmatijevic.template.springsimpleauth.mapper.AppUserLoginMapper;
 import com.mislavmatijevic.template.springsimpleauth.mapper.AppUserRegisterMapper;
 import com.mislavmatijevic.template.springsimpleauth.responses.ApiResponse;
 import com.mislavmatijevic.template.springsimpleauth.services.AppUserService;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AppUserController
 {
     private final AppUserRegisterMapper userRegisterMapper = new AppUserRegisterMapper();
+    private final AppUserLoginMapper userLoginMapper = new AppUserLoginMapper();
     private final AppUserService appUserService;
 
     @Autowired
@@ -25,10 +28,17 @@ public class AppUserController
         this.appUserService = appUserService;
     }
 
-    @PostMapping("")
+    @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUser(@RequestBody AppUserRegisterDto userRegistering)
     {
         long newUserId = appUserService.register(userRegisterMapper.map(userRegistering));
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(String.valueOf(newUserId)));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse> loginUser(@RequestBody AppUserLoginDto userLoggingIn)
+    {
+        appUserService.login(userLoginMapper.map(userLoggingIn));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("You're logged in!"));
     }
 }

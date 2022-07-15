@@ -1,6 +1,7 @@
 package com.mislavmatijevic.template.springsimpleauth.services;
 
 import com.mislavmatijevic.template.springsimpleauth.exceptions.UserAlreadyExistsException;
+import com.mislavmatijevic.template.springsimpleauth.exceptions.UserNotFoundException;
 import com.mislavmatijevic.template.springsimpleauth.model.AppUser;
 import com.mislavmatijevic.template.springsimpleauth.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,16 @@ public class AppUserService
         else
         {
             throw new UserAlreadyExistsException();
+        }
+    }
+
+    @Transactional
+    public void login(final AppUser userLogging)
+    {
+        AppUser foundUser = appUserRepository.getAppUserByEmailAndPassword(userLogging.getEmail(), userLogging.getPassword());
+        if (foundUser == null)
+        {
+            throw new UserNotFoundException();
         }
     }
 

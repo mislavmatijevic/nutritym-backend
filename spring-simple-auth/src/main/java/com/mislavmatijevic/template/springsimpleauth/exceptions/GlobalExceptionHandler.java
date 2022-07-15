@@ -15,4 +15,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse(false, ex.getLocalizedMessage()));
     }
+
+    @ExceptionHandler({UserNotFoundException.class})
+    protected ResponseEntity<ApiResponse> handleUserNotFound(final UserNotFoundException ex)
+    {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, ex.getLocalizedMessage()));
+    }
 }

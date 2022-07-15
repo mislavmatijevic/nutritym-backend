@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface AppUserRepository extends JpaRepository<AppUser, Long>
 {
     AppUser getAppUserByEmail(String email);
+
+    AppUser getAppUserByEmailAndPassword(String email, String password);
 }
