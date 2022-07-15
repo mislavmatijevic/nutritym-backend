@@ -24,20 +24,33 @@ class SpringSimpleAuthApplicationTests
     AppUserRegisterMapper userMapper = new AppUserRegisterMapper();
 
     @Test
-    @Order(1)
-    void registerAndAlreadyExistsTest()
+    void registerTest()
+    {
+        AppUserRegisterDto registerUser = giveRandomUser();
+
+        Optional<AppUser> found = userService.findById(userService.register(userMapper.map(registerUser)));
+        Assertions.assertNotNull(found);
+    }
+
+    @Test
+    void alreadyExistsTest()
+    {
+        AppUserRegisterDto registerUser = giveRandomUser();
+        userService.register(userMapper.map(registerUser));
+
+        AppUser userWithAlreadyUsedEmail = new AppUser();
+        userWithAlreadyUsedEmail.setEmail(registerUser.getEmail());
+
+        Assertions.assertThrows(UserAlreadyExistsException.class, () -> userService.register(userWithAlreadyUsedEmail));
+    }
+
+    private AppUserRegisterDto giveRandomUser()
     {
         AppUserRegisterDto registerUser = new AppUserRegisterDto();
         registerUser.setFirstName("Mislav");
         registerUser.setLastName("Matijević");
         registerUser.setEmail("mislav.mim@gmail.com");
         registerUser.setPassword("abcdefgh1");
-
-        Optional<AppUser> found = userService.findById(userService.register(userMapper.map(registerUser)));
-        assert found.isPresent();
-
-        AppUser userWithAlreadyUsedEmail = new AppUser();
-        userWithAlreadyUsedEmail.setEmail("mislav.mim@gmail.com");
-        Assertions.assertThrows(UserAlreadyExistsException.class, () -> userService.register(userWithAlreadyUsedEmail));
+        return registerUser;
     }
 }
