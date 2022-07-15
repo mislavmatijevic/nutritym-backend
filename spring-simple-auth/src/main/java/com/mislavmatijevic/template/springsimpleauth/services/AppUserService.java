@@ -1,5 +1,6 @@
 package com.mislavmatijevic.template.springsimpleauth.services;
 
+import com.mislavmatijevic.template.springsimpleauth.exceptions.UserAlreadyExistsException;
 import com.mislavmatijevic.template.springsimpleauth.model.AppUser;
 import com.mislavmatijevic.template.springsimpleauth.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,25 @@ public class AppUserService
     }
 
     @Transactional
-    public void save(AppUser appUser)
+    public long register(AppUser userRegistering) throws UserAlreadyExistsException
+    {
+        if (appUserRepository.getAppUserByEmail(userRegistering.getEmail()) == null)
+        {
+            return this.save(userRegistering).getUserId();
+        }
+        else
+        {
+            throw new UserAlreadyExistsException();
+        }
+    }
+
+    @Transactional
+    public AppUser save(AppUser appUser)
     {
         if (appUser != null)
-            appUserRepository.saveAndFlush(appUser);
+            return appUserRepository.saveAndFlush(appUser);
+        else
+            return null;
     }
 
     @Transactional
