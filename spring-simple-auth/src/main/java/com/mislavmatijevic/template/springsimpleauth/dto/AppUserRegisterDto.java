@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AppUserRegisterDto
+public class AppUserRegisterDto extends AppUserLoginDto
 {
     private String firstName;
     private String lastName;
-    private String email;
-    private String password;
 
     public String getFirstName()
     {
@@ -29,25 +27,5 @@ public class AppUserRegisterDto
     public void setLastName(final String lastName)
     {
         this.lastName = lastName;
-    }
-
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void setEmail(final String email)
-    {
-        this.email = email;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(final String password)
-    {
-        this.password = password;
     }
 }
