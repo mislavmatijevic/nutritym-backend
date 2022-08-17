@@ -4,10 +4,13 @@ import com.mislavmatijevic.template.springsimpleauth.exceptions.UserAlreadyExist
 import com.mislavmatijevic.template.springsimpleauth.exceptions.UserNotFoundException;
 import com.mislavmatijevic.template.springsimpleauth.model.AppUser;
 import com.mislavmatijevic.template.springsimpleauth.repository.AppUserRepository;
+import com.mislavmatijevic.template.springsimpleauth.util.PasswordHasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 
 @Service
@@ -27,10 +30,11 @@ public class AppUserService
     }
 
     @Transactional
-    public long register(AppUser userRegistering) throws UserAlreadyExistsException
+    public long register(AppUser userRegistering) throws UserAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException
     {
         if (appUserRepository.getAppUserByEmail(userRegistering.getEmail()) == null)
         {
+            userRegistering.setPassword(PasswordHasher.hash(userRegistering.getPassword()));
             return this.save(userRegistering).getUserId();
         }
         else
@@ -42,8 +46,15 @@ public class AppUserService
     @Transactional
     public void login(final AppUser userLogging)
     {
-        AppUser foundUser = appUserRepository.getAppUserByEmailAndPassword(userLogging.getEmail(), userLogging.getPassword());
-        if (foundUser == null)
+        AppUser foundUser = appUserRepository.getAppUserByEmail(userLogging.getEmail());
+        boolean isValidLogin = false;
+
+        if (foundUser != null)
+        {
+            isValidLogin = PasswordHasher.checkHash(userLogging.getPassword(), foundUser.getPassword());
+        }
+
+        if (!isValidLogin)
         {
             throw new UserNotFoundException();
         }

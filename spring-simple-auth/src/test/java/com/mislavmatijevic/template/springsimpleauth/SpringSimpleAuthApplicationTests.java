@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 
 @SpringBootTest
@@ -30,7 +32,16 @@ class SpringSimpleAuthApplicationTests
     {
         AppUserRegisterDto registerUser = giveRandomUser();
 
-        Optional<AppUser> found = userService.findById(userService.register(userMapper.map(registerUser)));
+        Optional<AppUser> found = Optional.empty();
+        try
+        {
+            found = userService.findById(userService.register(userMapper.map(registerUser)));
+        }
+        catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+        {
+            e.printStackTrace();
+            Assertions.fail();
+        }
         Assertions.assertNotNull(found);
     }
 
@@ -38,7 +49,15 @@ class SpringSimpleAuthApplicationTests
     void alreadyExistsTest()
     {
         AppUserRegisterDto registerUser = giveRandomUser();
-        userService.register(userMapper.map(registerUser));
+        try
+        {
+            userService.register(userMapper.map(registerUser));
+        }
+        catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+        {
+            e.printStackTrace();
+            Assertions.fail();
+        }
 
         AppUser userWithAlreadyUsedEmail = new AppUser();
         userWithAlreadyUsedEmail.setEmail(registerUser.getEmail());
@@ -50,7 +69,15 @@ class SpringSimpleAuthApplicationTests
     void correctLoginTest()
     {
         AppUserRegisterDto registerUser = giveRandomUser();
-        userService.register(userMapper.map(registerUser));
+        try
+        {
+            userService.register(userMapper.map(registerUser));
+        }
+        catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+        {
+            e.printStackTrace();
+            Assertions.fail();
+        }
 
         AppUser loginUser = new AppUser();
         loginUser.setEmail(registerUser.getEmail());

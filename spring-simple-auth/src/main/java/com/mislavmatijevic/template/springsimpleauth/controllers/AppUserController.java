@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AppUserController
@@ -31,8 +34,25 @@ public class AppUserController
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUser(@RequestBody AppUserRegisterDto userRegistering)
     {
-        long newUserId = appUserService.register(userRegisterMapper.map(userRegistering));
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(String.valueOf(newUserId)));
+        long newUserId = -1;
+
+        try
+        {
+            newUserId = appUserService.register(userRegisterMapper.map(userRegistering));
+        }
+        catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+        {
+            e.printStackTrace();
+        }
+
+        if (newUserId != -1)
+        {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(String.valueOf(newUserId)));
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Could not create new user!"));
+        }
     }
 
     @PostMapping("/login")
