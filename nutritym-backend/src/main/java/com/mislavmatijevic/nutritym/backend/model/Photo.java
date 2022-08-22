@@ -18,9 +18,19 @@ public class Photo
 
     private byte[] jpgFile;
 
+    public long getPhotoId()
+    {
+        return photoId;
+    }
+
     public void setPhotoId(final long photoId)
     {
         this.photoId = photoId;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     public void setName(final String name)
@@ -28,12 +38,22 @@ public class Photo
         this.name = name;
     }
 
+    public long getTimeAdded()
+    {
+        return timeAdded;
+    }
+
     public void setTimeAdded(final long timeAdded)
     {
         this.timeAdded = timeAdded;
     }
 
-    public void setPhotoBytes(final byte[] jpgFile)
+    public byte[] getJpgFile()
+    {
+        return jpgFile;
+    }
+
+    public void setJpgFile(final byte[] jpgFile)
     {
         if (jpgFile.length > 200_000)
         {
