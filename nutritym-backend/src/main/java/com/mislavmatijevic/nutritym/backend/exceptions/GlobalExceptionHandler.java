@@ -21,4 +21,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, ex.getLocalizedMessage()));
     }
+
+    @ExceptionHandler({PhotoTooLargeException.class})
+    protected ResponseEntity<ApiResponse> handleUserNotFound(final PhotoTooLargeException ex)
+    {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(false, ex.getLocalizedMessage()));
+    }
 }

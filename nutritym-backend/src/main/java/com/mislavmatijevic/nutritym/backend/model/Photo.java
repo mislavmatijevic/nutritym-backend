@@ -1,5 +1,7 @@
 package com.mislavmatijevic.nutritym.backend.model;
 
+import com.mislavmatijevic.nutritym.backend.exceptions.PhotoTooLargeException;
+
 import javax.persistence.*;
 
 @Entity
@@ -33,6 +35,10 @@ public class Photo
 
     public void setPhotoBytes(final byte[] jpgFile)
     {
+        if (jpgFile.length > 200_000)
+        {
+            throw new PhotoTooLargeException(jpgFile.length);
+        }
         this.jpgFile = jpgFile;
     }
 }
