@@ -16,6 +16,7 @@ public class Photo
 
     private long timeAdded;
 
+    @Lob
     private byte[] jpgFile;
 
     public long getPhotoId()

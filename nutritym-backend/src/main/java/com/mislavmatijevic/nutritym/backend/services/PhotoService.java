@@ -24,7 +24,7 @@ public class PhotoService
     @Transactional
     public long upload(final Photo photo)
     {
-        return photoRepository.save(photo).getPhotoId();
+        return photoRepository.saveAndFlush(photo).getPhotoId();
     }
 
     @Transactional
