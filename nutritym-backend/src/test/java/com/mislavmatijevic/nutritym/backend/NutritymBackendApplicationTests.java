@@ -18,8 +18,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SpringSimpleAuthApplicationTests
-{
+class NutritymBackendApplicationTests {
     // Ensures random users have different emails. That makes them unique between tests.
     private static int userCount = 0;
 
@@ -28,17 +27,13 @@ class SpringSimpleAuthApplicationTests
     AppUserRegisterMapper userMapper = new AppUserRegisterMapper();
 
     @Test
-    void registerTest()
-    {
+    void registerTest() {
         AppUserRegisterDto registerUser = giveRandomUser();
 
         Optional<AppUser> found = Optional.empty();
-        try
-        {
+        try {
             found = userService.findById(userService.register(userMapper.map(registerUser)));
-        }
-        catch (NoSuchAlgorithmException | InvalidKeySpecException e)
-        {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
             Assertions.fail();
         }
@@ -46,15 +41,11 @@ class SpringSimpleAuthApplicationTests
     }
 
     @Test
-    void alreadyExistsTest()
-    {
+    void alreadyExistsTest() {
         AppUserRegisterDto registerUser = giveRandomUser();
-        try
-        {
+        try {
             userService.register(userMapper.map(registerUser));
-        }
-        catch (NoSuchAlgorithmException | InvalidKeySpecException e)
-        {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
             Assertions.fail();
         }
@@ -66,15 +57,11 @@ class SpringSimpleAuthApplicationTests
     }
 
     @Test
-    void correctLoginTest()
-    {
+    void correctLoginTest() {
         AppUserRegisterDto registerUser = giveRandomUser();
-        try
-        {
+        try {
             userService.register(userMapper.map(registerUser));
-        }
-        catch (NoSuchAlgorithmException | InvalidKeySpecException e)
-        {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
             Assertions.fail();
         }
@@ -87,8 +74,7 @@ class SpringSimpleAuthApplicationTests
     }
 
     @Test
-    void badLoginTest()
-    {
+    void badLoginTest() {
         AppUser loginUser = new AppUser();
         loginUser.setEmail("thisEmailDoesNotExistInTheDB@tooBad.nope");
         loginUser.setPassword("iCanLiveWithThat");
@@ -96,8 +82,7 @@ class SpringSimpleAuthApplicationTests
         Assertions.assertThrows(UserNotFoundException.class, () -> userService.login(loginUser));
     }
 
-    AppUserRegisterDto giveRandomUser()
-    {
+    AppUserRegisterDto giveRandomUser() {
         AppUserRegisterDto registerUser = new AppUserRegisterDto();
         registerUser.setFirstName("Mislav");
         registerUser.setLastName("Matijević");
