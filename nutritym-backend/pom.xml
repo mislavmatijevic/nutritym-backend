@@ -10,7 +10,7 @@
     <groupId>com.mislavmatijevic.template</groupId>
     <artifactId>nutritym-backend</artifactId>
     <version>1.0.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>nutritym-backend</name>
     <description>Nutritym backend implementation for primarily storing photos.</description>
     <properties>
@@ -50,6 +50,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
