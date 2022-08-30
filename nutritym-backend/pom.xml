@@ -14,7 +14,7 @@
     <name>nutritym-backend</name>
     <description>Nutritym backend implementation for primarily storing photos.</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
